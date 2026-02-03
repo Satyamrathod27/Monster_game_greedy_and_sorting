@@ -1,13 +1,6 @@
 # Number of monsters
 n = int(input())
 
-# Your starting power
-current_power = int(input())
-
-# Required power for each monster
-power = []
-for _ in range(n):
-    power.append(int(input()))
 
 # Bonus power gained after defeating each monster
 bonus = []
