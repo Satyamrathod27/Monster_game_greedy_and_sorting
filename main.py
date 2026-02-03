@@ -1,33 +1,51 @@
-# Number of monsters
-n = int(input())
+import heapq
 
-# Your starting power
-current_power = int(input())
+# Input number of items
+n = int(input("Enter n: "))
 
-# Required power for each monster
+# Initial power
+initial_power = int(input("Enter initial power: "))
+
+# Read power list
 power = []
+print("Enter power values:")
 for _ in range(n):
-    power.append(int(input()))
+	power.append(int(input()))
 
-# Bonus power gained after defeating each monster
+# Read bonus list
 bonus = []
+print("Enter bonus values:")
 for _ in range(n):
-    bonus.append(int(input()))
+	bonus.append(int(input()))
 
-# Combine power and bonus into pairs
+# Pair (required_power, bonus)
 monsters = list(zip(power, bonus))
 
-# Sort monsters by required power (smallest first)
-monsters.sort()
+# Sort by required power
+monsters.sort(key=lambda x: x[0])
 
-defeated = 0  # count how many monsters we defeat
+current = initial_power
+i = 0
+killed = 0
 
-for req_power, gain in monsters:
-    if current_power >= req_power:
-        current_power += gain  # gain bonus power
-        defeated += 1
-    else:
-        break  # can't defeat further monsters
+# max-heap for bonuses (Python has min-heap so we push negative)
+available = []
 
-print(defeated)
+while True:
+	# Add all monsters we can currently kill
+	while i < n and monsters[i][0] <= current:
+            heapq.heappush(available, -monsters[i][1])
+            i += 1
+
+	# If no available monsters, we are stuck
+	if not available:
+    	    break
+
+	# Kill the available monster with the maximum bonus
+	best_bonus = -heapq.heappop(available)
+	current += best_bonus
+	killed += 1
+
+print("Maximum monsters killed:", killed)
+print("Final power:", current)
 
